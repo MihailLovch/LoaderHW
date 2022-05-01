@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,6 +44,14 @@ public class Downloader implements Runnable{
             System.out.println("Change INSTALL_PATH value in Downloader.java");
             e.printStackTrace();
         }
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public URL getUrl() {
+        return url;
     }
 
     public int getBytesDownloaded() {

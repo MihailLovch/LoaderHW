@@ -11,7 +11,7 @@ public class Load implements Commands {
 
     @Override
     public void execute() throws MalformedURLException {
-        Runnable runnable = new Downloader(app.getCommandParameter());
+        Downloader runnable = new Downloader(app.getCommandParameter());
         Thread thread = new Thread(runnable);
         app.getProcesses().add(thread);
         app.getRunnable().add(runnable);

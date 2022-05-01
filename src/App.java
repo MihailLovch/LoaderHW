@@ -4,19 +4,21 @@ import java.util.Scanner;
 
 public class App extends AbstractApp {
 
-    private final int AMOUNT_OF_INPUT = 2;
+    private final int MAX_AMOUNT_OF_INPUT = 2;
+    private final int MIN_AMOUNT_OF_INPUT = 1;
     private final int COMMAND = 0;
     private final int PARAMETER = 1;
 
     private ArrayList<Thread> processes;
-    private ArrayList<Runnable> runnable;
+    private ArrayList<Downloader> runnable;
     private Scanner sc;
     private String[] userInput;
     private Commands[] commands;
     private String[] commandNames;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedURLException {
         App app = new App();
+        Downloader downloader = new Downloader("12");
     }
 
     @Override
@@ -26,15 +28,18 @@ public class App extends AbstractApp {
         sc = new Scanner(System.in);
         commands = new Commands[]{
                 new Load(this),
+                new Status(this),
+                new StatusManipulator(this),
+                new StatusManipulator(this)
         };
-        commandNames = new String[]{"load",};
+        commandNames = new String[]{"load","status","stop","continue"};
     }
 
     @Override
     protected void start() {
         while (true) {
             try {
-                userInput = sc.nextLine().split(" ");
+                userInput = checkUserInput();
             } catch (IllegalArgumentException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -60,7 +65,7 @@ public class App extends AbstractApp {
 
     public String[] checkUserInput() {
         String[] userInput = sc.nextLine().split(" ");
-        if (userInput.length != AMOUNT_OF_INPUT) {
+        if (userInput.length > MAX_AMOUNT_OF_INPUT || userInput.length < MIN_AMOUNT_OF_INPUT) {
             throw new IllegalArgumentException("Not enough arguments");
         } else {
             return userInput;
@@ -71,12 +76,15 @@ public class App extends AbstractApp {
         return processes;
     }
 
-    public ArrayList<Runnable> getRunnable() {
+    public ArrayList<Downloader> getRunnable() {
         return runnable;
     }
     public String getCommandParameter(){
         return userInput[PARAMETER];
     }
+    public String getCommandName(){
+        return userInput[COMMAND];
+    }
 }
 // commands :
-// load; stop; continue; downloaded, %
+// load; stop;status ;continue
